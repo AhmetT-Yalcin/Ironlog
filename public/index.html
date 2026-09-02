@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <title>Ironlog</title>
+
+  <meta name="description" content="A simple training log: assign workouts, log sets, track progression." />
+  <meta name="theme-color" content="#0E1013" />
+
+  <!-- iOS install support -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Ironlog" />
+  <link rel="apple-touch-icon" href="icons/icon-180.png" />
+
+  <link rel="icon" href="icons/icon-192.png" type="image/png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+
+  <style>
+    html, body { margin: 0; padding: 0; background: #0E1013; height: 100%; }
+    #root { min-height: 100%; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("service-worker.js").catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
