@@ -992,11 +992,11 @@ function ExerciseCard({ ex, open, onToggle, onUpdateSet, onAddSet, onRemoveSet, 
 
   return (
     <div style={{ background: "var(--surface-1)", border: "1px solid var(--line)", borderRadius: 12, overflow: "hidden" }}>
-      <div style={{
+      <button onClick={onToggle} style={{
         width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "13px 14px", cursor: "pointer", color: "var(--text-primary)",
+        background: "none", border: "none", padding: "13px 14px", cursor: "pointer", color: "var(--text-primary)",
       }}>
-        <div onClick={onToggle} style={{ textAlign: "left", display: "flex", alignItems: "center", gap: 7, flex: 1 }}>
+        <div style={{ textAlign: "left", display: "flex", alignItems: "center", gap: 7 }}>
           <div>
             <div style={{ fontWeight: 500, fontSize: 14, display: "flex", alignItems: "center", gap: 6 }}>
               {ex.name}
@@ -1005,38 +1005,8 @@ function ExerciseCard({ ex, open, onToggle, onUpdateSet, onAddSet, onRemoveSet, 
             <div style={{ fontSize: 12, color: "var(--text-faint)" }}>{ex.targetReps} reps · {ex.targetSets} sets</div>
           </div>
         </div>
-        <button
-          onClick={e => { e.stopPropagation(); setSwapping(s => !s); }}
-          title="Swap exercise for today"
-          style={{ background: "none", border: "none", color: "var(--text-faint)", cursor: "pointer", padding: 6, display: "flex" }}
-        >
-          <Repeat size={15} />
-        </button>
-        <div onClick={onToggle} style={{ display: "flex" }}>
-          <ChevronDown size={18} style={{ transform: open ? "rotate(180deg)" : "none", transition: "transform 0.15s", color: "var(--text-faint)" }} />
-        </div>
-      </div>
-
-      {swapping && (
-        <div style={{ padding: "0 14px 14px", borderTop: "1px solid var(--line)", paddingTop: 12 }}>
-          <label style={labelStyle}>Replace with</label>
-          <input
-            autoFocus value={swapValue} onChange={e => setSwapValue(e.target.value)}
-            placeholder="e.g. Incline Bench Press" list={datalistId} style={textInputStyle}
-            onKeyDown={e => { if (e.key === "Enter") confirmSwap(); if (e.key === "Escape") setSwapping(false); }}
-          />
-          <datalist id={datalistId}>
-            {EXERCISE_LIBRARY.map(n => <option key={n} value={n} />)}
-          </datalist>
-          <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-            <button onClick={confirmSwap} style={{ ...primaryBtn, padding: "9px 14px", fontSize: 13 }}>Swap for today</button>
-            <button onClick={() => setSwapping(false)} style={{ ...ghostIconBtn, padding: "9px 14px" }}>Cancel</button>
-          </div>
-          <p style={{ fontSize: 11, color: "var(--text-faint)", marginTop: 8 }}>
-            Only changes today — your saved workout template stays the same.
-          </p>
-        </div>
-      )}
+        <ChevronDown size={18} style={{ transform: open ? "rotate(180deg)" : "none", transition: "transform 0.15s", color: "var(--text-faint)" }} />
+      </button>
 
       {open && (
         <div style={{ borderTop: "1px solid var(--line)", padding: "10px 14px 14px" }}>
@@ -1067,6 +1037,37 @@ function ExerciseCard({ ex, open, onToggle, onUpdateSet, onAddSet, onRemoveSet, 
           }}>
             <Plus size={14} /> Add set
           </button>
+
+          {!swapping ? (
+            <button
+              onClick={() => setSwapping(true)}
+              style={{
+                marginTop: 10, background: "none", border: "none", color: "var(--text-faint)",
+                fontSize: 12, cursor: "pointer", display: "flex", alignItems: "center", gap: 5, padding: "4px 2px",
+              }}
+            >
+              <Repeat size={12} /> Swap this exercise for today
+            </button>
+          ) : (
+            <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--line)" }}>
+              <label style={labelStyle}>Replace with</label>
+              <input
+                autoFocus value={swapValue} onChange={e => setSwapValue(e.target.value)}
+                placeholder="e.g. Incline Bench Press" list={datalistId} style={textInputStyle}
+                onKeyDown={e => { if (e.key === "Enter") confirmSwap(); if (e.key === "Escape") setSwapping(false); }}
+              />
+              <datalist id={datalistId}>
+                {EXERCISE_LIBRARY.map(n => <option key={n} value={n} />)}
+              </datalist>
+              <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                <button onClick={confirmSwap} style={{ ...primaryBtn, padding: "9px 14px", fontSize: 13 }}>Swap for today</button>
+                <button onClick={() => setSwapping(false)} style={{ ...ghostIconBtn, padding: "9px 14px" }}>Cancel</button>
+              </div>
+              <p style={{ fontSize: 11, color: "var(--text-faint)", marginTop: 8 }}>
+                Only changes today — your saved workout template stays the same.
+              </p>
+            </div>
+          )}
         </div>
       )}
     </div>
